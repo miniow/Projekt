@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Projekt.ProgramLogic
 {
-    internal class Nuron
+    internal class Neuron
     {
     }
 }

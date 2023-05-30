@@ -39,7 +39,7 @@ namespace Projekt
 
         private void loadData_Click(object sender, RoutedEventArgs e)
         {
-            if (true)
+            if (dataGrid.Items.Count>0)
             {
                 MessageBoxResult result = MessageBox.Show("Wczytanie nowych danych spowoduje usunięcie obecnych. Czy chcesz kontynuować?", "Ostrzeżenie", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No)
@@ -57,7 +57,7 @@ namespace Projekt
             {
                 try
                 {
-                    string[] lines = File.ReadAllLines(filePath);
+                    string[] lines = File.ReadAllLines(openFileDialog.FileName);
                     if (lines.Length > 0)
                     {
                         string firstLine = lines[0];
