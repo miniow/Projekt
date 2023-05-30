@@ -41,13 +41,17 @@
                     </Grid.RowDefinitions>
                     
                     <Rectangle Fill="Yellow" Margin="2.5" Grid.Row="0"/>
-                   <ListView Grid.Row="1" Name="lvTrain"/>
+                    <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" Grid.Row="1">
+                        <DataGrid.Columns>
+                           
+                        </DataGrid.Columns>
+                    </DataGrid>
 
                 </Grid>
                 <Separator></Separator>
                 <Grid Grid.Row="1">
                     <Rectangle Fill="Green" Margin="2.5"/>
-                    <Border BorderBrush="Black" BorderThickness="1"/>
+                   
                 </Grid>
             </Grid>
             <Grid Grid.Column="1" >

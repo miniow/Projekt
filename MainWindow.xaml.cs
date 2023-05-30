@@ -39,7 +39,7 @@ namespace Projekt
 
         private void loadData_Click(object sender, RoutedEventArgs e)
         {
-            if (false)
+            if (true)
             {
                 MessageBoxResult result = MessageBox.Show("Wczytanie nowych danych spowoduje usunięcie obecnych. Czy chcesz kontynuować?", "Ostrzeżenie", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No)
@@ -57,7 +57,7 @@ namespace Projekt
             {
                 try
                 {
-                    string[] lines = File.ReadAllLines(openFileDialog.FileName);
+                    string[] lines = File.ReadAllLines(filePath);
                     if (lines.Length > 0)
                     {
                         string firstLine = lines[0];
@@ -65,9 +65,13 @@ namespace Projekt
 
                         for (int i = 0; i < columnNames.Length; i++)
                         {
-
+                            DataGridTextColumn column = new DataGridTextColumn();
+                            column.Header = columnNames[i];
+                            column.Binding = new System.Windows.Data.Binding("[" + i + "]");
+                            dataGrid.Columns.Add(column);
                         }
 
+                        // Dodawanie danych do siatki
                         for (int i = 1; i < lines.Length; i++)
                         {
                             string[] values = lines[i].Split('\t');
@@ -80,7 +84,7 @@ namespace Projekt
                                     rowData.Add(parsedValue);
                                 }
                             }
-                       
+                            dataGrid.Items.Add(rowData);
                         }
                     }
                 }
