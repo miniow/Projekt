@@ -1,0 +1,70 @@
+﻿<Window x:Class="Projekt.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projekt"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Menu>
+                <MenuItem Header="File" FontSize="16">
+                    <MenuItem Header="Load data" Name="loadData" FontSize="16" Click="loadData_Click"></MenuItem>
+                    <MenuItem Header="Exit" Name="exit" FontSize="16" Click="exit_Click"></MenuItem>
+                </MenuItem>
+                
+            </Menu>
+            
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="2.5">
+
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    
+                    <Rectangle Fill="Yellow" Margin="2.5" Grid.Row="0"/>
+                   <ListView Grid.Row="1" Name="lvTrain"/>
+
+                </Grid>
+                <Separator></Separator>
+                <Grid Grid.Row="1">
+                    <Rectangle Fill="Green" Margin="2.5"/>
+                    <Border BorderBrush="Black" BorderThickness="1"/>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Rectangle Fill="Red" Margin="2.5"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Rectangle Fill="Blue" Margin="2.5"/>
+                </Grid>
+            </Grid>
+
+            
+        </Grid>
+        
+    </Grid>
+</Window>
