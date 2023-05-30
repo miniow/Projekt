@@ -8,67 +8,53 @@
         Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="100"/>
             <RowDefinition/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid>
-            <Menu>
+            <Menu VerticalAlignment="Top" HorizontalAlignment="Left">
                 <MenuItem Header="File" FontSize="16">
                     <MenuItem Header="Load data" Name="loadData" FontSize="16" Click="loadData_Click"></MenuItem>
+                    <MenuItem Header="Save state" Name="saveData" FontSize="16" Click="saveData_Click"></MenuItem>
                     <MenuItem Header="Exit" Name="exit" FontSize="16" Click="exit_Click"></MenuItem>
                 </MenuItem>
-                
+                <MenuItem Header="Edit" FontSize="16">
+
+                </MenuItem>
+                <MenuItem Header="View" FontSize="16">
+
+                </MenuItem>
+                <MenuItem Header="Neural Options" FontSize="16">
+
+                </MenuItem>
+                <MenuItem Header="Help" FontSize="16">
+
+                </MenuItem>
             </Menu>
             
         </Grid>
         <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Margin="2.5">
+            <TabControl  >
+                <TabItem Header="Data" Width="100">
+                    <Grid >
+                        <DataGrid Name="dataGrid" ItemsSource="{Binding}"/>
+                    </Grid>
 
-                    
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    
-                    <Rectangle Fill="Yellow" Margin="2.5" Grid.Row="0"/>
-                    <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" Grid.Row="1">
-                        <DataGrid.Columns>
-                           
-                        </DataGrid.Columns>
-                    </DataGrid>
-
-                </Grid>
-                <Separator></Separator>
-                <Grid Grid.Row="1">
-                    <Rectangle Fill="Green" Margin="2.5"/>
+                        
                    
-                </Grid>
-            </Grid>
-            <Grid Grid.Column="1" >
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Rectangle Fill="Red" Margin="2.5"/>
-                </Grid>
-                <Grid Grid.Row="1">
-                    <Rectangle Fill="Blue" Margin="2.5"/>
-                </Grid>
-            </Grid>
+                    
 
-            
+                </TabItem>
+                <TabItem Header="Simulation" Width="100">
+                    <Grid Background="Green"/>
+                </TabItem>
+                <TabItem Header="Graphs" Width="100">
+                    <Grid Background="#FFE5E5E5" Margin="0,0,0,-300">
+                        <TextBlock Padding="20" Text="124fsdaf"></TextBlock>
+                    </Grid>
+                </TabItem>
+            </TabControl>
         </Grid>
-        
     </Grid>
 </Window>

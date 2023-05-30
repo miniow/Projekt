@@ -100,7 +100,7 @@ namespace Projekt.ProgramLogic
         public void Train(double[][] learninigExapmles, double[] decisionArg, double totalError)
         {
             InitWeights();
-            Console.WriteLine("podaj wspołczynnik uczenia (0,1)");
+           
             double n = Convert.ToDouble(Console.ReadLine);
             double meanError = 0;
             do

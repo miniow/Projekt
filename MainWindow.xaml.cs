@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Data;
 
 namespace Projekt
 {
@@ -27,10 +28,7 @@ namespace Projekt
 
     public partial class MainWindow : Window
     {
-        public double[,] trainData;
-        public double[,] validData;
-        public string[] columnNames;
-
+        DataTable dataTable = new DataTable();
         public MainWindow()
         {
             InitializeComponent();
@@ -48,7 +46,8 @@ namespace Projekt
                 }
                 else
                 {
-
+                    dataTable.Rows.Clear();
+                    dataTable.Columns.Clear();
                 }
             }
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -65,32 +64,21 @@ namespace Projekt
 
                         for (int i = 0; i < columnNames.Length; i++)
                         {
-                            DataGridTextColumn column = new DataGridTextColumn();
-                            column.Header = columnNames[i];
-                            column.Binding = new System.Windows.Data.Binding("[" + i + "]");
-                            dataGrid.Columns.Add(column);
+                            dataTable.Columns.Add(columnNames[i], typeof(double));
                         }
 
                         // Dodawanie danych do siatki
                         for (int i = 1; i < lines.Length; i++)
                         {
                             string[] values = lines[i].Split('\t');
-                            List<double> rowData = new List<double>();
-                            foreach (string value in values)
-                            {
-                                double parsedValue;
-                                if (double.TryParse(value, out parsedValue))
-                                {
-                                    rowData.Add(parsedValue);
-                                }
-                            }
-                            dataGrid.Items.Add(rowData);
+                            dataTable.Rows.Add(values);
                         }
                     }
+                    dataGrid.DataContext = dataTable;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Błąd podczas otwierania pliku: " + ex.Message);
+                    MessageBox.Show(ex.Message);
                 }
             }
 
@@ -98,6 +86,11 @@ namespace Projekt
         private void exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void saveData_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
