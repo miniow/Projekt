@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-
+using Projekt.ProgramLogic;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,6 +29,9 @@ namespace Projekt
     public partial class MainWindow : Window
     {
         DataTable dataTable = new DataTable();
+        public int lastIndex = 0;
+        private const double rectWidth = 80;
+        private const double rectHeight = 40;
         public MainWindow()
         {
             InitializeComponent();
@@ -81,14 +84,154 @@ namespace Projekt
                     MessageBox.Show(ex.Message);
                 }
             }
+            creat_Neuron(dataTable.Columns.Count);
+
 
         }
         private void exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
+        private void creat_Neuron(int n)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                Rectangle rectangle = new Rectangle
+                {
+                    Width = rectWidth,
+                    Height = rectHeight,
+                    Fill = Brushes.LightBlue,
+                    Stroke = Brushes.Black,
+                    Margin = new Thickness(5)
+                };
+                Canvas.SetTop(rectangle, 20);
+                Canvas.SetLeft(rectangle, i * (rectWidth + 20));
+                canvasNeuron.Children.Add(rectangle);
+                TextBlock textBlock = new TextBlock();
+                textBlock.Name = ("x" + i.ToString());
+                textBlock.Text = ("x" + i.ToString());
+                textBlock.FontSize = 12;
+                textBlock.Foreground = Brushes.Black;
+                Canvas.SetTop(textBlock, 20 + rectangle.Height/2); 
+                Canvas.SetLeft(textBlock, i * (rectWidth + 20) + rectangle.Width/2);
+                canvasNeuron.Children.Add(textBlock);
+            }
 
+            // Tworzenie trójkątów
+            for (int i = 0; i < n; i++)
+            {
+
+                Polygon triangle = new Polygon
+                {
+                    Fill = Brushes.LightGreen,
+                    Name = ("w" + i.ToString()),
+                    Points = new PointCollection
+                    {
+                        new Point(0, 0),
+                        new Point(rectWidth, 0),
+                        new Point(rectWidth / 2, rectHeight)
+                    },
+                    Stroke = Brushes.Black,
+                    Margin = new Thickness(5)
+                };
+                Canvas.SetTop(triangle, 80);
+                Canvas.SetLeft(triangle, i * (rectWidth + 20));
+                canvasNeuron.Children.Add(triangle);
+
+                TextBlock textBlock = new TextBlock();
+                textBlock.Name = ("w" + i.ToString());
+                textBlock.Text = ("w" + i.ToString());
+                textBlock.FontSize = 12;
+                textBlock.Foreground = Brushes.Black;
+                Canvas.SetTop(textBlock, 80 + rectHeight / 2);
+                Canvas.SetLeft(textBlock, i * (rectWidth + 20) + rectWidth/2);
+                canvasNeuron.Children.Add(textBlock);
+            }
+            // Tworzenie koła
+            Ellipse circle = new Ellipse
+            {
+                Name = "sumator",
+                Width = rectWidth,
+                Height = rectHeight,
+                Fill = Brushes.LightSalmon,
+                Stroke = Brushes.Black
+            };
+            Canvas.SetTop(circle, (30 + rectHeight * 2 + 50 ));
+            Canvas.SetLeft(circle, (n - 1)*rectWidth / 2 +20);
+            canvasNeuron.Children.Add(circle);
+            TextBlock textBlocksum = new TextBlock();
+            textBlocksum.Name = "sum";
+            textBlocksum.Text = "sum";
+            textBlocksum.FontSize = 12;
+            textBlocksum.Foreground = Brushes.Black;
+            Canvas.SetTop(textBlocksum, (30 + rectHeight * 2 + 50) + rectHeight/2);
+            Canvas.SetLeft(textBlocksum, ((n - 1) * rectWidth / 2) + rectWidth/2);
+            canvasNeuron.Children.Add((TextBlock)textBlocksum); 
+
+            // Tworzenie kwadratu funkcji wyjścia
+            Rectangle outputSquare = new Rectangle
+            {
+                Name = "output",
+                Width = rectWidth,
+                Height = rectHeight,
+                Fill = Brushes.Orange,
+                Stroke = Brushes.Black,
+            };
+            Canvas.SetTop(outputSquare, ((30 + rectHeight * 4 + 50)));
+            Canvas.SetLeft(outputSquare, (n - 1) * rectWidth / 2 + 20);
+            canvasNeuron.Children.Add(outputSquare);
+            TextBlock textBlockout = new TextBlock();
+            textBlockout.Name = "out";
+            textBlockout.Text = "out";
+            textBlockout.FontSize = 12;
+            textBlockout.Foreground = Brushes.Black;
+            Canvas.SetTop(textBlockout, rectHeight * 4 + 60 + rectHeight/2);
+            Canvas.SetLeft(textBlockout, ((n - 1) * rectWidth /2) + rectWidth/2);               
+
+            canvasNeuron.Children.Add(textBlockout);
+        }
         private void saveData_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+
+        private void btStep_Click(object sender, RoutedEventArgs e)
+        {
+            try {
+                DataRow row = dataTable.Rows[lastIndex];
+                double[] values = row.ItemArray.Select(x => Convert.ToDouble(x)).ToArray();
+                MessageBox.Show(values[1].ToString());
+
+
+                lastIndex++;
+            }
+            catch(Exception ex) { MessageBox.Show(ex.Message); }
+            
+        }
+
+        private void btAuto_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void rbtPerceptron_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void rbtAdaline_Checked(object sender, RoutedEventArgs e)
         {
 
         }

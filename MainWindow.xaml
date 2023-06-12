@@ -13,41 +13,54 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid>
-            <Menu VerticalAlignment="Top" HorizontalAlignment="Left">
-                <MenuItem Header="File" FontSize="16">
-                    <MenuItem Header="Load data" Name="loadData" FontSize="16" Click="loadData_Click"></MenuItem>
-                    <MenuItem Header="Save state" Name="saveData" FontSize="16" Click="saveData_Click"></MenuItem>
-                    <MenuItem Header="Exit" Name="exit" FontSize="16" Click="exit_Click"></MenuItem>
-                </MenuItem>
-                <MenuItem Header="Edit" FontSize="16">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Menu VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <MenuItem Header="File" FontSize="16">
+                        <MenuItem Header="Load data" Name="loadData" FontSize="16" Click="loadData_Click"></MenuItem>
+                        <MenuItem Header="Save state" Name="saveData" FontSize="16" Click="saveData_Click"></MenuItem>
+                        <MenuItem Header="Exit" Name="exit" FontSize="16" Click="exit_Click"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Edit" FontSize="16">
 
-                </MenuItem>
-                <MenuItem Header="View" FontSize="16">
+                    </MenuItem>
+                    <MenuItem Header="View" FontSize="16">
 
-                </MenuItem>
-                <MenuItem Header="Neural Options" FontSize="16">
+                    </MenuItem>
+                    <MenuItem Header="Neural Options" FontSize="16">
 
-                </MenuItem>
-                <MenuItem Header="Help" FontSize="16">
+                    </MenuItem>
+                    <MenuItem Header="Help" FontSize="16">
 
-                </MenuItem>
-            </Menu>
-            
+                    </MenuItem>
+                </Menu>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Button Name="btStep" Width="40" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,5,5" Content="step" Click="btStep_Click"/>
+                <Button Name="btAuto" Width="40" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,5,5,5" Content="auto" Click="btAuto_Click"/>
+                <RadioButton Name="rbtPerceptron" Content="Perceptron" HorizontalAlignment="Left" Margin="115,8,0,0" VerticalAlignment="Top" IsChecked="True" Checked="rbtPerceptron_Checked"/>
+                <RadioButton Name="rbtAdaline" Content="Adaline" HorizontalAlignment="Left" Margin="115,30,0,0" VerticalAlignment="Top" Checked="rbtAdaline_Checked"/>
+
+            </Grid>
+
         </Grid>
         <Grid Grid.Row="1">
             <TabControl  >
                 <TabItem Header="Data" Width="100">
-                    <Grid >
-                        <DataGrid Name="dataGrid" ItemsSource="{Binding}"/>
-                    </Grid>
 
-                        
-                   
-                    
+                    <Grid >
+                        <DataGrid Name="dataGrid" ItemsSource="{Binding}" Margin="10,70,10,10" Background="#FFC0C1B5" BorderBrush="#FF3585D2" GridLinesVisibility="All" Width="Auto" Opacity="0.8"/>
+                        <Separator HorizontalAlignment="Left" Margin="305,65,0,0" VerticalAlignment="Top"/>
+                    </Grid>
 
                 </TabItem>
                 <TabItem Header="Simulation" Width="100">
-                    <Grid Background="Green"/>
+                    <Canvas x:Name="canvasNeuron" Background="White" Margin="10,70,10,10">
+                    </Canvas>
+
                 </TabItem>
                 <TabItem Header="Graphs" Width="100">
                     <Grid Background="#FFE5E5E5" Margin="0,0,0,-300">

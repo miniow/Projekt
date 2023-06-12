@@ -64,8 +64,6 @@ namespace Projekt.ProgramLogic
                     d = decisionArg[i];
                     y = ActFunc(CalculateOutput(learninigExapmles[i]));
                     error = d - y;
-                    Console.WriteLine(i.ToString());
-                    Console.WriteLine(string.Join(", ", weights));
 
                     if (y == d)
                     {
@@ -95,13 +93,13 @@ namespace Projekt.ProgramLogic
     }
     public class Adaline : Neuron
     {
-        public Adaline(int number) : base(number) { }
+        double n;
+        public Adaline(int number, double num2) : base(number) { this.n = num2;  }
 
         public void Train(double[][] learninigExapmles, double[] decisionArg, double totalError)
         {
             InitWeights();
            
-            double n = Convert.ToDouble(Console.ReadLine);
             double meanError = 0;
             do
             {
