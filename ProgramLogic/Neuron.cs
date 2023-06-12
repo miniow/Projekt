@@ -9,7 +9,8 @@ namespace Projekt.ProgramLogic
     public class Neuron
     {
         protected int numberOfInputs;
-        protected double[] weights;
+        public double[] weights;
+        public double actualMeanError =0;
         public Neuron(int number)
         {
             this.numberOfInputs = number;
@@ -18,6 +19,7 @@ namespace Projekt.ProgramLogic
             {
                 weights[i] = 0;
             }
+            InitWeights();
         }
         public void InitWeights()
         {
@@ -38,10 +40,10 @@ namespace Projekt.ProgramLogic
                 throw new ArgumentException("incorect number of inputs");
             }
 
-            double sum = 0;
+            double sum = weights[0];
             for (int i = 1; i < numberOfInputs; i++)
             {
-                sum += weights[i] * inputs[i] + weights[0];
+                sum += weights[i+1] * inputs[i];
             }
             return sum;
         }
@@ -49,20 +51,20 @@ namespace Projekt.ProgramLogic
     public class Perceptron : Neuron
     {
         public Perceptron(int number) : base(number) { }
-
-        public void Train(double[][] learninigExapmles, double[] decisionArg, double totalError)
+        public double actualError = 0;
+        public void Train(double[] learninigExapmles, double totalError, int maxIter)
         {
-            InitWeights();
+            int iter = 0;
             double meanError;
             do
             {
                 double sumError = 0;
-                for (int i = 0; i < learninigExapmles.Length; i++)
+                for (int i = 0; i < learninigExapmles.Length - 1; i++)
                 {
 
                     double y, d, error;
-                    d = decisionArg[i];
-                    y = ActFunc(CalculateOutput(learninigExapmles[i]));
+                    d = learninigExapmles[learninigExapmles.Length - 1];
+                    y = ActFunc(CalculateOutput(learninigExapmles));
                     error = d - y;
 
                     if (y == d)
@@ -73,15 +75,16 @@ namespace Projekt.ProgramLogic
                     {
                         for (int j = 0; j < numberOfInputs; j++)
                         {
-                            weights[j] = weights[j] + learninigExapmles[i][j] * d;
+                            //  weights[j] = weights[j] + learninigExapmles[i][j] * d;
                         }
                     }
                     sumError += Math.Abs(error);
                 }
                 meanError = sumError / learninigExapmles.Length;
-            } while (meanError > totalError);
-            ;
+                iter++;
+            } while (meanError > totalError || iter >= maxIter);
         }
+
         private double ActFunc(double num)
         {
             if (num > 0)
@@ -98,7 +101,6 @@ namespace Projekt.ProgramLogic
 
         public void Train(double[][] learninigExapmles, double[] decisionArg, double totalError)
         {
-            InitWeights();
            
             double meanError = 0;
             do

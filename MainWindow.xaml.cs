@@ -23,13 +23,16 @@ namespace Projekt
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    
+
 
 
     public partial class MainWindow : Window
     {
         DataTable dataTable = new DataTable();
         public int lastIndex = 0;
+        public double learningRate;
+        public int maxIter;
+        public double totalError;
         private const double rectWidth = 80;
         private const double rectHeight = 40;
         public MainWindow()
@@ -40,7 +43,7 @@ namespace Projekt
 
         private void loadData_Click(object sender, RoutedEventArgs e)
         {
-            if (dataGrid.Items.Count>0)
+            if (dataGrid.Items.Count > 0)
             {
                 MessageBoxResult result = MessageBox.Show("Wczytanie nowych danych spowoduje usunięcie obecnych. Czy chcesz kontynuować?", "Ostrzeżenie", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No)
@@ -112,8 +115,8 @@ namespace Projekt
                 textBlock.Text = ("x" + i.ToString());
                 textBlock.FontSize = 12;
                 textBlock.Foreground = Brushes.Black;
-                Canvas.SetTop(textBlock, 20 + rectangle.Height/2); 
-                Canvas.SetLeft(textBlock, i * (rectWidth + 20) + rectangle.Width/2);
+                Canvas.SetTop(textBlock, 20 + rectangle.Height / 2);
+                Canvas.SetLeft(textBlock, i * (rectWidth + 20) + rectangle.Width / 2);
                 canvasNeuron.Children.Add(textBlock);
             }
 
@@ -144,7 +147,7 @@ namespace Projekt
                 textBlock.FontSize = 12;
                 textBlock.Foreground = Brushes.Black;
                 Canvas.SetTop(textBlock, 80 + rectHeight / 2);
-                Canvas.SetLeft(textBlock, i * (rectWidth + 20) + rectWidth/2);
+                Canvas.SetLeft(textBlock, i * (rectWidth + 20) + rectWidth / 2);
                 canvasNeuron.Children.Add(textBlock);
             }
             // Tworzenie koła
@@ -156,17 +159,17 @@ namespace Projekt
                 Fill = Brushes.LightSalmon,
                 Stroke = Brushes.Black
             };
-            Canvas.SetTop(circle, (30 + rectHeight * 2 + 50 ));
-            Canvas.SetLeft(circle, (n - 1)*rectWidth / 2 +20);
+            Canvas.SetTop(circle, (30 + rectHeight * 2 + 50));
+            Canvas.SetLeft(circle, (n - 1) * rectWidth / 2 + 20);
             canvasNeuron.Children.Add(circle);
             TextBlock textBlocksum = new TextBlock();
             textBlocksum.Name = "sum";
             textBlocksum.Text = "sum";
             textBlocksum.FontSize = 12;
             textBlocksum.Foreground = Brushes.Black;
-            Canvas.SetTop(textBlocksum, (30 + rectHeight * 2 + 50) + rectHeight/2);
-            Canvas.SetLeft(textBlocksum, ((n - 1) * rectWidth / 2) + rectWidth/2);
-            canvasNeuron.Children.Add((TextBlock)textBlocksum); 
+            Canvas.SetTop(textBlocksum, (30 + rectHeight * 2 + 50) + rectHeight / 2);
+            Canvas.SetLeft(textBlocksum, ((n - 1) * rectWidth / 2) + rectWidth / 2);
+            canvasNeuron.Children.Add((TextBlock)textBlocksum);
 
             // Tworzenie kwadratu funkcji wyjścia
             Rectangle outputSquare = new Rectangle
@@ -185,43 +188,12 @@ namespace Projekt
             textBlockout.Text = "out";
             textBlockout.FontSize = 12;
             textBlockout.Foreground = Brushes.Black;
-            Canvas.SetTop(textBlockout, rectHeight * 4 + 60 + rectHeight/2);
-            Canvas.SetLeft(textBlockout, ((n - 1) * rectWidth /2) + rectWidth/2);               
+            Canvas.SetTop(textBlockout, rectHeight * 4 + 60 + rectHeight / 2);
+            Canvas.SetLeft(textBlockout, ((n - 1) * rectWidth / 2) + rectWidth / 2);
 
             canvasNeuron.Children.Add(textBlockout);
         }
         private void saveData_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-
-
-        private void btStep_Click(object sender, RoutedEventArgs e)
-        {
-            try {
-                DataRow row = dataTable.Rows[lastIndex];
-                double[] values = row.ItemArray.Select(x => Convert.ToDouble(x)).ToArray();
-                MessageBox.Show(values[1].ToString());
-
-
-                lastIndex++;
-            }
-            catch(Exception ex) { MessageBox.Show(ex.Message); }
-            
-        }
-
-        private void btAuto_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
         {
 
         }
@@ -232,6 +204,11 @@ namespace Projekt
         }
 
         private void rbtAdaline_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void sLR_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
 
         }
