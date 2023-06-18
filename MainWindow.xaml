@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projekt"
+        xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen" MinWidth="820" MinHeight="400">
     <Grid>
@@ -39,10 +40,8 @@
                 </Menu>
             </Grid>
             <Grid Grid.Row="2">
-                <Button Name="btStep" Width="40" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,5,5" Content="step" />
-                <Button Name="btAuto" Width="40" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,5,5,5" Content="auto" />
-                <RadioButton Name="rbtPerceptron" Content="Perceptron" HorizontalAlignment="Left" Margin="115,8,0,0" VerticalAlignment="Top" IsChecked="True" Checked="rbtPerceptron_Checked"/>
-                <RadioButton Name="rbtAdaline" Content="Adaline" HorizontalAlignment="Left" Margin="115,30,0,0" VerticalAlignment="Top" Checked="rbtAdaline_Checked"/>
+                <Button Name="btStep" Width="40" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,5,5" Content="step" Click="btStep_Click" />
+                <Button Name="btAuto" Width="40" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,5,5,5" Content="auto" Click="btAuto_Click" />
                 <Slider x:Name="sLR" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="210,31,0,0"  Width="120" Maximum="0.99" Minimum="0.01" TickFrequency="0.01" ValueChanged="sLR_ValueChanged"/>
                 <TextBox x:Name="tbMI" Width="40" Height="20" Margin="390,26,370,4" VerticalAlignment="Top" HorizontalAlignment="Left"/>
   
@@ -50,8 +49,8 @@
                 <TextBlock HorizontalAlignment="Left" Margin="210,7,0,0" TextWrapping="Wrap" Text="Learning Rate for adaline" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Left" Margin="390,7,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Maximum iterations"/>
                 <TextBlock HorizontalAlignment="Left" Margin="556,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="59" Text="Total Error"/>
-                <Button Content="Enter" HorizontalAlignment="Left" Margin="435,26,0,0" VerticalAlignment="Top"/>
-                <Slider x:Name="sTE" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="556,31,0,0"  Width="120" Maximum="0.99" Minimum="0.01" TickFrequency="0.01" />
+                <Button Name ="btSetMaxIter"  Content="Enter" HorizontalAlignment="Left" Margin="435,26,0,0" VerticalAlignment="Top" Click="btSetMaxIter_Click"/>
+                <Slider x:Name="sTE" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="556,31,0,0"  Width="120" Maximum="0.99" Minimum="0.01" TickFrequency="0.01" ValueChanged="sTE_ValueChanged" />
                 <TextBlock HorizontalAlignment="Left" Margin="681,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Path=Value, ElementName=sTE, StringFormat=F2}"/>
 
             </Grid>
@@ -68,13 +67,28 @@
 
                 </TabItem>
                 <TabItem Header="Simulation" Width="100">
-                    <Canvas x:Name="canvasNeuron" Background="White" Margin="10,70,10,10">
-                    </Canvas>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Canvas Grid.Column="0" x:Name="canvasNeuron" Background="White" Margin="10,70,10,10">
+
+                        </Canvas>
+                        <Canvas Grid.Column="1" x:Name="canvasAdaline" Background="White" Margin="10,70,10,10"/>
+                    </Grid>
+                    
+                    
 
                 </TabItem>
                 <TabItem Header="Graphs" Width="100">
-                    <Grid Background="#FFE5E5E5" Margin="0,0,0,-300">
-                        <TextBlock Padding="20" Text="124fsdaf"></TextBlock>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <oxy:PlotView x:Name="plotView" Grid.Row="0"   VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" Height="400"/>
+                        <oxy:PlotView x:Name="errorPlot" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="800" Height="400"/>
                     </Grid>
                 </TabItem>
             </TabControl>
