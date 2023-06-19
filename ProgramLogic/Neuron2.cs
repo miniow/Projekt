@@ -100,9 +100,20 @@ namespace Projekt.ProgramLogic
 
         public Adaline2(int num, double ratio=0.1)
         {
+            numberOfInputs = num;
             this.weights = new double[num];
             this.learningRate = ratio;
         }
+
+        public void InitWeigths()
+        {
+            Random random = new Random();
+            for (int i = 0; i < numberOfInputs; i++)
+            {
+                weights[i] = random.NextDouble() * 2 - 1;
+            }
+        }
+
         public double CalculateOutput(double[] inputs)
         {
             if (inputs.Length != numberOfInputs)
@@ -119,7 +130,7 @@ namespace Projekt.ProgramLogic
         }
         public double TeachOneIteration(double[] x, double d)
         {
-            double s = 0.0;
+            double s = 0;
             for(int i=0; i<numberOfInputs;i++)
             {
                 s += weights[i] * x[i];

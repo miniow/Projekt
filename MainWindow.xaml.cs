@@ -43,9 +43,12 @@ namespace Projekt
         private const double rectHeight = 40;
         private List<ProgramLogic.Point>? points;
         public Neuron2? neuron2;
+        public Adaline2? adaline2;
         public PlotModel PlotModel { get; private set; }
         public int epocCount = 0;
+        public int epocCountAdaline = 0;
         List<double> neuronErrorValues = new List<double>();
+        List<double> adalineErrorValues = new List<double>();
 
         public MainWindow()
         {
@@ -67,6 +70,7 @@ namespace Projekt
             UpdatePlotModel();
             
         }
+
         private void UpdatePlotModel()
         {
             PlotModel = new PlotModel { Title = "Wizualizacja prostej oraz punktów"};
@@ -102,8 +106,28 @@ namespace Projekt
             PlotModel.Series.Add(negativeScatterSeries);
             plotView.Model = PlotModel;
         }
+
+        private void DeleteSeries(string nazwa)
+        {
+            LineSeries serieseToTemove = null;
+            foreach (var series in PlotModel.Series)
+            {
+                if (series is LineSeries lineSeries && lineSeries.Title == "Perceptron")
+                {
+                    serieseToTemove = lineSeries;
+                    break;
+                }
+            }
+            if(serieseToTemove != null)
+            {
+                PlotModel.Series.Remove(serieseToTemove);
+                plotView.Model = PlotModel;
+            }
+        }
+
         private void UpdatePlotLine()
         {
+            DeleteSeries("Perceptron");
             double[] neuronWeights = neuron2.GetWeigths();
             if (neuronWeights[2] != 0)
             {
@@ -122,7 +146,8 @@ namespace Projekt
                     double y = slope * x - intercept;
                     lineSeries.Points.Add(new DataPoint(x, y));
                 }
-
+                
+                
                 PlotModel.Series.Add(lineSeries);
 
                 plotView.Model = PlotModel;
@@ -131,6 +156,7 @@ namespace Projekt
             
             
         }
+
         private void UpdateErrorPlot(List<double> errorValues)
         {
 
@@ -149,6 +175,7 @@ namespace Projekt
 
             errorPlot.Model = errorPlotModel;
         }
+
         private void loadData_Click(object sender, RoutedEventArgs e)
         {
             if (dataGrid.Items.Count > 0)
@@ -164,6 +191,12 @@ namespace Projekt
                     dataTable.Columns.Clear();
                     canvasNeuron.Children.Clear();
                     canvasAdaline.Children.Clear();
+                    if(points !=null)
+                    {
+                        points.Clear();
+                    }
+                    
+
                 }
             }
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -200,15 +233,19 @@ namespace Projekt
             }
             neuron2 = new Neuron2(dataTable.Columns.Count);
             neuron2.InitWeigths();
+            adaline2 = new Adaline2(dataTable.Columns.Count, learningRate);
+            adaline2.InitWeigths();
             
             creat_Neuron(dataTable.Columns.Count);
             AddPoints();
 
         }
+
         private void exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
+
         private void creat_Neuron(int n)
         {
             for (int i = 0; i < n; i++)
@@ -393,10 +430,12 @@ namespace Projekt
 
             canvasAdaline.Children.Add(textBlockoutAdaline);
         }
+
         private void saveData_Click(object sender, RoutedEventArgs e)
         {
 
         }
+
         private TextBlock FindTextBlockInCanvas(Canvas canvas, string textBlockName)
         {
             foreach (var child in canvas.Children)
@@ -416,6 +455,7 @@ namespace Projekt
             }
             return null;
         }
+
         public async Task UpdateWeightsCanvas(double[] array, double[] neuronWeights)
         {
             
@@ -443,6 +483,7 @@ namespace Projekt
             await Task.Delay(200);
             
         }
+
         public async Task UpdateOtherCanvas(double sum, double output)
         {
             TextBlock sumN = FindTextBlockInCanvas(canvasNeuron, ("Nsum"));
@@ -458,6 +499,7 @@ namespace Projekt
             }
             await Task.Delay(200);
         }
+
         public async Task<double> Training(int iterations)
         {
             if(dataTable.Rows.Count <=1)
@@ -514,12 +556,94 @@ namespace Projekt
             return meanError;
         }
 
+        public async Task UpdateWeightsAdalineCanvas(double[] array, double[] neuronWeights)
+        {
+            for (int i = 0; i < dataTable.Columns.Count; i++)
+            {
+                TextBlock founded2 = FindTextBlockInCanvas(canvasAdaline, ("Ax" + i.ToString()));
+                if (founded2 != null)
+                {
+                    founded2.Text = array[i].ToString();
+                }
+
+            }
+
+            for (int i = 0; i < dataTable.Columns.Count; i++)
+            {
+                TextBlock founded = FindTextBlockInCanvas(canvasAdaline, ("Aw" + i.ToString()));
+
+                if (founded != null)
+                {
+                    founded.Text = neuronWeights[i].ToString();
+                }
+
+            }
+            await Task.Delay(200);
+        }
+
+        public async Task UpdateOtherAdalineCanvas(double sum, double output)
+        {
+            TextBlock sumN = FindTextBlockInCanvas(canvasAdaline, ("Asum"));
+            if (sumN != null)
+            {
+                sumN.Text = sum.ToString();
+            }
+            //await Task.Delay(500);
+            TextBlock outN = FindTextBlockInCanvas(canvasAdaline, ("Aout"));
+            if (outN != null)
+            {
+                outN.Text = output.ToString();
+            }
+            await Task.Delay(200);
+        }
+
+        public async Task<double> TrainingAdaline(int iterations)
+        {
+            if (dataTable.Rows.Count <= 1)
+            {
+                throw new Exception("table is empty");
+            }
+            if (iterations <= 0)
+            {
+                throw new ArgumentException("maxymalna liczba iteraci musi być większ od 0");
+            }
+            double meanError = 0;
+            for (int i = 0; i < iterations; i++)
+            {
+                double sumError = 0;
+                for (int j = 0; j < dataTable.Rows.Count; j++)
+                {
+                    DataRow row = dataTable.Rows[j];
+                    double[] doubleArray = row.ItemArray
+                        .Select(value => Convert.ToDouble(value))
+                        .ToArray();
+                    double d = doubleArray[dataTable.Columns.Count - 1];
+                    Array.Resize(ref doubleArray, doubleArray.Length - 1);
+                    List<double> list = new List<double>(doubleArray);
+                    list.Insert(0, 1);
+                    doubleArray = list.ToArray();
+                    double[] actualWeights = adaline2.weights;
+
+                    await UpdateWeightsAdalineCanvas(doubleArray, actualWeights);
+
+                    sumError = adaline2.TeachOneIteration(doubleArray, d);
 
 
+                }
+                meanError = sumError/dataTable.Rows.Count;
+                adalineErrorValues.Add(meanError);
+                if (meanError < totalError || epocCountAdaline >= maxIter)
+                {
+                    MessageBox.Show("Adaline wgoal reached after:" + epocCount.ToString() + "\n Neuron weights: " + string.Join("\n", adaline2.weights) + "\n Mean Error =" + meanError.ToString());
+                    return meanError;
+                }
+            }
+            return meanError;
+        }
 
         private void sLR_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-
+            learningRate = sLR.Value;
         }
 
         private void btStep_Click(object sender, RoutedEventArgs e)
@@ -539,7 +663,7 @@ namespace Projekt
         {
             try
             {
-                MessageBox.Show("max iter " + maxIter.ToString());
+               // MessageBox.Show("max iter " + maxIter.ToString());
                 Training(maxIter);
             }
             catch (Exception ex)
@@ -563,7 +687,30 @@ namespace Projekt
         private void sTE_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             totalError = sTE.Value;
-            
+        }
+
+        private void btAutoAdaline_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TrainingAdaline(1);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btStepAdaline_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TrainingAdaline(maxIter);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
